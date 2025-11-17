@@ -7,8 +7,17 @@
 # sudo pip3 install adafruit-circuitpython-motor
 # sudo pip3 install adafruit-circuitpython-pca9685
 '''
+import os
+import sys
 import time
 from adafruit_motor import servo
+
+# Allow running this script directly from the examples/ folder.
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 import pca9685_helper
 
 pca = pca9685_helper.get_pca9685()

@@ -1,6 +1,14 @@
 #!/usr/bin/env/python3
+import os
+import sys
 import time
 from adafruit_motor import motor
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+if PROJECT_ROOT not in sys.path:
+  sys.path.insert(0, PROJECT_ROOT)
+
 import pca9685_helper
 
 # motor_EN_A: Pin7  |  motor_EN_B: Pin11
