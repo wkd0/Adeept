@@ -8,16 +8,10 @@
 # sudo pip3 install adafruit-circuitpython-pca9685
 '''
 import time
-from board import SCL, SDA
-import busio
 from adafruit_motor import servo
-from adafruit_pca9685 import PCA9685
+import pca9685_helper
 
-i2c = busio.I2C(SCL, SDA)
-# Create a simple PCA9685 class instance.
-pca = PCA9685(i2c, address=0x5f) #default 0x40
-
-pca.frequency = 50
+pca = pca9685_helper.get_pca9685()
 
 # servo7 = servo.Servo(pca.channels[7], min_pulse=580, max_pulse=2350)
 # servo7 = servo.Servo(pca.channels[7], min_pulse=500, max_pulse=2600)

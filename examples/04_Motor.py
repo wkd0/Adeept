@@ -1,11 +1,7 @@
 #!/usr/bin/env/python3
 import time
-from board import SCL, SDA
-import busio
-#from adafruit_motor import servo,motor
-#from adafruit_motor import motor
-from adafruit_pca9685 import PCA9685
 from adafruit_motor import motor
+import pca9685_helper
 
 # motor_EN_A: Pin7  |  motor_EN_B: Pin11
 # motor_A:  Pin8,Pin10    |  motor_B: Pin13,Pin12
@@ -29,33 +25,25 @@ left_backward = 0
 right_forward = 0
 right_backward= 1
 
-pwn_A = 0
-pwm_B = 0
-  
+motor1 = motor2 = motor3 = motor4 = None
+pwm_motor = None
+
+
 def map(x,in_min,in_max,out_min,out_max):
   return (x - in_min)/(in_max - in_min) *(out_max - out_min) +out_min
 
 
-#def setup():
-i2c = busio.I2C(SCL, SDA)
-  #i2c = busio.I2C()
-  # Create a simple PCA9685 class instance.
-#  pwm_motor.channels[7].duty_cycle = 0xFFFF
-pwm_motor = PCA9685(i2c, address=0x5f) #default 0x40
-pwm_motor.frequency = 50
- # time.sleep(0.1)
-#  pwm_motor.channels[7].duty_cycle = 0xFFFF
-
-#  motor11 = motor.DCMotor(pca.channels[5], pca.channels[6])
-motor1 = motor.DCMotor(pwm_motor.channels[MOTOR_M1_IN1],pwm_motor.channels[MOTOR_M1_IN2] )
-motor1.decay_mode = (motor.SLOW_DECAY)
-motor2 = motor.DCMotor(pwm_motor.channels[MOTOR_M2_IN1],pwm_motor.channels[MOTOR_M2_IN2] )
-motor2.decay_mode = (motor.SLOW_DECAY)
-motor3 = motor.DCMotor(pwm_motor.channels[MOTOR_M3_IN1],pwm_motor.channels[MOTOR_M3_IN2] )
-motor3.decay_mode = (motor.SLOW_DECAY)
-motor4 = motor.DCMotor(pwm_motor.channels[MOTOR_M4_IN1],pwm_motor.channels[MOTOR_M4_IN2] )
-motor4.decay_mode = (motor.SLOW_DECAY)
-#  motorStop()
+def setup():
+  global pwm_motor,motor1,motor2,motor3,motor4
+  pwm_motor = pca9685_helper.get_pca9685(50)
+  motor1 = motor.DCMotor(pwm_motor.channels[MOTOR_M1_IN1],pwm_motor.channels[MOTOR_M1_IN2] )
+  motor1.decay_mode = (motor.SLOW_DECAY)
+  motor2 = motor.DCMotor(pwm_motor.channels[MOTOR_M2_IN1],pwm_motor.channels[MOTOR_M2_IN2] )
+  motor2.decay_mode = (motor.SLOW_DECAY)
+  motor3 = motor.DCMotor(pwm_motor.channels[MOTOR_M3_IN1],pwm_motor.channels[MOTOR_M3_IN2] )
+  motor3.decay_mode = (motor.SLOW_DECAY)
+  motor4 = motor.DCMotor(pwm_motor.channels[MOTOR_M4_IN1],pwm_motor.channels[MOTOR_M4_IN2] )
+  motor4.decay_mode = (motor.SLOW_DECAY)
 
 def Motor(channel,direction,motor_speed):
   if motor_speed > 100:
@@ -88,11 +76,13 @@ def motorStop():#Motor stops
 
 def destroy():
   motorStop()
-  pwm_motor.deinit()
+  if pwm_motor:
+    pwm_motor.deinit()
 
 
 if __name__ == '__main__':
   try:
+    setup()
     chann =  1
     # while True:
      

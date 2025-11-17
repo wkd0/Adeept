@@ -6,10 +6,8 @@
 # Author      : Adeept
 # Date        : 2025/03/10
 import time
-from board import SCL, SDA
-import busio
-from adafruit_pca9685 import PCA9685
 from adafruit_motor import motor
+import pca9685_helper
 
 MOTOR_M1_IN1 =  15      #Define the positive pole of M1
 MOTOR_M1_IN2 =  14      #Define the negative pole of M1
@@ -36,7 +34,8 @@ pwn_A = 0
 pwm_B = 0
 # FREQ = 1000
 FREQ = 50
-# motor1,motor2,motor3,motor4,pwm_motor  = None
+motor1 = motor2 = motor3 = motor4 = None
+pwm_motor = None
 
 
 '''
@@ -53,14 +52,8 @@ def map(x,in_min,in_max,out_min,out_max):
 
 
 def setup():#Motor initialization
-    global motor1,motor2,motor3,motor4,pwm_motor,pwm_motor
-    i2c = busio.I2C(SCL, SDA)
-    # Create a simple PCA9685 class instance.
-    #  pwm_motor.channels[7].duty_cycle = 0xFFFF
-    pwm_motor = PCA9685(i2c, address=0x5f) #default 0x40
-
-    pwm_motor.frequency = FREQ
-
+    global motor1,motor2,motor3,motor4,pwm_motor
+    pwm_motor = pca9685_helper.get_pca9685(FREQ)
     motor1 = motor.DCMotor(pwm_motor.channels[MOTOR_M1_IN1],pwm_motor.channels[MOTOR_M1_IN2] )
     motor1.decay_mode = (motor.SLOW_DECAY)
     motor2 = motor.DCMotor(pwm_motor.channels[MOTOR_M2_IN1],pwm_motor.channels[MOTOR_M2_IN2] )

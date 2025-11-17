@@ -91,6 +91,13 @@ class RobotWS2812(threading.Thread):
         self.lightMode = 'none'
         self.set_all_led_color_data(0,0,0)
         self.__flag.clear()
+
+    def setColor(self, R_input, G_input, B_input):
+        """Set a static color immediately, cancelling any animations."""
+        self.lightMode = 'manual'
+        self.__flag.clear()
+        self.set_all_led_color_data(R_input, G_input, B_input)
+
     def police(self):
         self.lightMode = 'police'
         self.resume()
@@ -150,7 +157,9 @@ class RobotWS2812(threading.Thread):
             self.policeProcessing()
         elif self.lightMode == 'breath':
             self.breathProcessing()
-
+        elif self.lightMode == 'manual':
+            self.__flag.clear()
+    
 
     def run(self):
         while 1:

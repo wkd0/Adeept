@@ -4,22 +4,15 @@
 # Author	  : Adeept
 from __future__ import division
 import time
-from board import SCL, SDA
-import busio
 from adafruit_motor import servo
-from adafruit_pca9685 import PCA9685
 import threading
+import pca9685_helper
 
 
 
 
 # When the motor occupies pins 9-15 on the PCA9685, 
 # the servo can only use pins 0-8.
-i2c = busio.I2C(SCL, SDA)
-# Create a simple PCA9685 class instance.
-pwm_servo = PCA9685(i2c, address=0x5f) #default 0x40
-pwm_servo.frequency = 50
-
 
 init_pwm0 = 90
 init_pwm1 = 90
@@ -32,8 +25,6 @@ init_pwm6 = 90
 init_pwm7 = 90
 
 servo_num = 8
-i2c = None
-pwm_servo = None
 
 class ServoCtrl(threading.Thread):
 
@@ -41,12 +32,7 @@ class ServoCtrl(threading.Thread):
 
 
         
-        # global i2c,pwm_servo
-        self.i2c = busio.I2C(SCL, SDA)
-        # Create a simple PCA9685 class instance.
-        self.pwm_servo = PCA9685(self.i2c, address=0x5f) #default 0x40
-
-        self.pwm_servo.frequency = 50
+        self.pwm_servo = pca9685_helper.get_pca9685()
 
         
         self.sc_direction = [1,1,1,1, 1,1,1,1]
