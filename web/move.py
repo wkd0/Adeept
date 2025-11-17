@@ -57,7 +57,7 @@ def setup():#Motor initialization
     i2c = busio.I2C(SCL, SDA)
     # Create a simple PCA9685 class instance.
     #  pwm_motor.channels[7].duty_cycle = 0xFFFF
-    pwm_motor = PCA9685(i2c, address=0x5f) #default 0x40
+    pwm_motor = PCA9685(i2c, address=0x40) #default 0x40
 
     pwm_motor.frequency = FREQ
 

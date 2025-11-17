@@ -17,7 +17,7 @@ import threading
 # the servo can only use pins 0-8.
 i2c = busio.I2C(SCL, SDA)
 # Create a simple PCA9685 class instance.
-pwm_servo = PCA9685(i2c, address=0x5f) #default 0x40
+pwm_servo = PCA9685(i2c, address=0x40) #default 0x40
 pwm_servo.frequency = 50
 
 
@@ -44,7 +44,7 @@ class ServoCtrl(threading.Thread):
         # global i2c,pwm_servo
         self.i2c = busio.I2C(SCL, SDA)
         # Create a simple PCA9685 class instance.
-        self.pwm_servo = PCA9685(self.i2c, address=0x5f) #default 0x40
+        self.pwm_servo = PCA9685(self.i2c, address=0x40) #default 0x40
 
         self.pwm_servo.frequency = 50
 
